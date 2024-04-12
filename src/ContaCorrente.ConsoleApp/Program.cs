@@ -14,12 +14,16 @@ namespace ContaCorrente.ConsoleApp
     {
         static void Main(string[] args)
         {
-            Cliente cliente = new Cliente("Fulano", "Silva", "123.456.789-00");
-            contaCorrente conta = new contaCorrente(123, 1000, true, 500, new List<Movimentação>(), cliente);
-            conta.Deposito(100);
-            conta.Saque(200);
-            conta.Transferencia(300, new contaCorrente(124, 1000, true, 500, new List<Movimentação>(), new Cliente("Ciclano", "Silva", "987.654.321-00")));
-            conta.Extrato();
+            Cliente fulano = new Cliente("Fulano", "Silva", "123.456.789-00");
+            Cliente ciclano = new Cliente("Ciclano", "Silva", "987.654.321-00");
+
+            contaCorrente contaFulano = new contaCorrente(123, 1000, true, 500, new List<Transação>(), fulano);
+            contaCorrente contaCiclano = new contaCorrente(124, 1000, true, 500, new List<Transação>(), ciclano);
+
+            contaFulano.Deposito(100);
+            contaFulano.Saque(200);
+            contaFulano.Transferencia(300, contaCiclano);
+            contaFulano.Extrato();
         }
     }
 }

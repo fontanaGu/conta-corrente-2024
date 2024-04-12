@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace ContaCorrente.ConsoleApp
 {
-    internal class Movimentação
+    internal class Transação
     {
-        public Movimentação() { }
-        public Movimentação(double valor, bool crédito)
+        public Transação() { }
+        public Transação(double valor, bool crédito)
         {
             Valor = valor;
             Crédito = crédito;
