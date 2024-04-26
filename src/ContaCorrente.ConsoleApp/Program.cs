@@ -1,29 +1,62 @@
-﻿using System.ComponentModel;
-using System.Drawing;
-using System.Runtime.Intrinsics.X86;
-namespace ContaCorrente.ConsoleApp
+﻿using ContaCorrente.ConsoleApp.pastaCliente;
+namespace ContaCorrente.ConsoleApp;
+
+internal class Program
 {
-        //Uma conta corrente possui um número, um saldo, um status que informa se ela é especial ou não, um limite e um histórico de movimentações.
-        //Uma movimentação possui um valor e uma informação se ela é uma movimentação de crédito ou débito. 
-        //Cada conta terá operações de saques, depósitos, visualização de saldo, visualização de extrato e transferência entre contas.
-       //Cada conta vai ter o nome, o sobrenome e cpf do cliente dono da conta.
-       //Uma conta corrente só pode fazer saques desde que o valor não exceda o limite de saque que é o limite + saldo.
-      //Não precisa implementar a interação com usuário.
-
-    internal class Program
+    private static void Main(string[] args)
     {
-        static void Main(string[] args)
+        var cliente1 = new Cliente("", "", "");
+
+        var contaCorrente = new pastaConta.ContaCorrente(1, 1200, 1000, cliente1);
+
+        //visualização de saldo
+        Console.WriteLine("R$ " + contaCorrente.ObterSaldo());
+
+        //saques
+        contaCorrente.Sacar(200);
+
+        Console.WriteLine("Após saque: R$ " + contaCorrente.ObterSaldo());
+
+        //depósitos
+        contaCorrente.Depositar(400);
+
+        Console.WriteLine("Após depósito: R$ " + contaCorrente.ObterSaldo());
+
+        var cliente2 = new Cliente("", "", "");
+
+        var contaCorrente2 = new pastaConta.ContaCorrente(2, 5000, 3000, cliente2);
+
+        #region Operações Conta 2
+
+        Console.WriteLine("R$ " + contaCorrente2.ObterSaldo());
+
+        // transferencia
+        contaCorrente.Transferir(300, contaCorrente2);
+
+        Console.WriteLine("Após transferência: R$ " + contaCorrente2.ObterSaldo());
+
+        #endregion
+
+        Console.WriteLine("\nExtrato conta 1:");
+
+        for (var i = 0; i < contaCorrente.Historico.Length; i++)
         {
-            Cliente fulano = new Cliente("Fulano", "Silva", "123.456.789-00");
-            Cliente ciclano = new Cliente("Ciclano", "Silva", "987.654.321-00");
+            var movimentacao = contaCorrente.Historico[i];
 
-            contaCorrente contaFulano = new contaCorrente(123, 1000, true, 500, new List<Transação>(), fulano);
-            contaCorrente contaCiclano = new contaCorrente(124, 1000, true, 500, new List<Transação>(), ciclano);
-
-            contaFulano.Deposito(100);
-            contaFulano.Saque(200);
-            contaFulano.Transferencia(300, contaCiclano);
-            contaFulano.Extrato();
+            if (movimentacao != null)
+                Console.WriteLine(movimentacao.Tipo + " " + movimentacao.Valor);
         }
+
+        Console.WriteLine("\nExtrato conta 2:");
+
+        for (var i = 0; i < contaCorrente2.Historico.Length; i++)
+        {
+            var movimentacao = contaCorrente2.Historico[i];
+
+            if (movimentacao != null)
+                Console.WriteLine(movimentacao.Tipo + " " + movimentacao.Valor);
+        }
+
+        Console.ReadLine();
     }
 }
